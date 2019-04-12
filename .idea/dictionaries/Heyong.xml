@@ -3,16 +3,31 @@
     <words>
       <w>addreads</w>
       <w>bashpath</w>
+      <w>brkpntl</w>
+      <w>brkpntr</w>
+      <w>cindel</w>
+      <w>cindels</w>
       <w>collectfeature</w>
       <w>fapath</w>
+      <w>fasta</w>
       <w>gendata</w>
+      <w>genlen</w>
+      <w>genpos</w>
+      <w>getdata</w>
+      <w>heterozygote</w>
+      <w>homozygote</w>
+      <w>indel</w>
       <w>indels</w>
       <w>insertsize</w>
       <w>isvariant</w>
       <w>loaddata</w>
+      <w>mapq</w>
       <w>modelpath</w>
+      <w>pnext</w>
       <w>readlength</w>
       <w>sampath</w>
+      <w>setmate</w>
+      <w>splitline</w>
       <w>stdvar</w>
       <w>tablepath</w>
       <w>vcindel</w>

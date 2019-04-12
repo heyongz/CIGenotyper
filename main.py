@@ -2,7 +2,7 @@ from BasicClasses import Table, VCF
 from _pickle import dump, load
 from FeatureCollection import *
 from SparseBayes import RVC
-from numpy import array
+import numpy as np
 import sys
 import os
 
@@ -29,7 +29,7 @@ def gendata(num):
     """
     [label1, feature1] = collectfeature(num, True)
     [label2, feature2] = collectfeature(num, False)
-    return [array(label1+label2), array(feature1+feature2)]
+    return [np.array(label1+label2).astype(np.float), np.array(feature1+feature2).astype(float)]
 
 
 def writedata(num):
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     fapath = r'FILES/chr19_100w.fa'
     sampath = r'FILES/result.sam'
     tablepath = r'FILES/table.txt'
-    modelpath = r'FILES/MODEL/model_50.rvc'
+    modelpath = r'FILES/MODEL/model_200.rvc'
     bashpath = r'bash.sh'
 
     assert sys.platform, "linux"
@@ -62,13 +62,15 @@ if __name__ == "__main__":
     assert os.path.exists(tablepath), "Table file not found."
     assert os.path.exists(bashpath), "Bash file not found."
 
-    # [label, feature] = loaddata(50)
+    # [label, feature] = loaddata(300)
     # clf = RVC().fit(feature, label)
     # dump(clf, open(modelpath, 'wb'))
 
+    # writedata(1000)
+
     clf = load(open(modelpath, 'rb'))
-    [label, feature] = loaddata(100)
-    print("="*80, '\n', array(label))
+    [label, feature] = loaddata(500)
+    print("="*80, '\n', np.array(label))
     print("="*80, '\n', clf.predict(feature))
     print("="*80, '\n', "Accuracy:", clf.score(feature, label))
 

@@ -1,11 +1,11 @@
 from random import randint
+import logging
 
 
 class Table(object):
     """Table file class for complex indel simulation."""
 
     __reference = ''
-    __idx = 0
 
     def __init__(self, fapath, tablepath, isvariant, num):
         """Initialize an instance.
@@ -26,37 +26,59 @@ class Table(object):
         with open(tablepath, 'w') as file:
             ss = ""
             if isvariant:
-                num = int(num / 50) * 2
-                for i in range(num):
-                    ss += self.__genVariants(0)       # Generate homozygote.
-                    ss += self.__genVariants(1)       # Generate heterozygote.
+                ss = self.__genVariants(num)
             file.write(ss)
 
-    def __genVariants(self, type):
+    def __genVariants(self, num):
         """Generate variants information.
-        :param type: An integer (0 or 1) indicating type of variants.
+        :param num: An integer indicating number of variants.
         :return: A string contains variants information.
         """
         pos = 0
         ss = ''
 
-        # Generate 50 variants every call to ensure the mutation rate below 5%.
-        # Every 2 lines providing an complex indel information.
-        for i in range(1, 50 + 1, 2):
-            pos += randint(15000, 20000)
+        """
+        Total length of reference is 1000,000.
+        Step value between complex indel is 100000/2/n.
+        TODO: Automatically set step.
+        """
+        def __genpos():
+            """Generate position of complex indel.
+            :return: An integer indicates the position of complex indel.
+            """
+            return randint(600, 900)
 
-            if type == 0:
-                label = 3       # Homozygote.
-            else:
-                label = 1       # Heterozygote.
+        def __genlen():
+            """Generate length of deletion or insertion.
+            :return: An integer indicates the length.
+            """
+            return randint(200, 800)
 
-            num = randint(500, 1500)
-            ss += (str(self.__idx + i) + '\t' + str(pos) + '\t-' + str(num) + '\t' +
-                   str(label) + '\t1\t0\t' + self.__reference[pos - 1:pos - 1 + num] + '\n')
-            num = randint(500, 1500)
-            ss += (str(self.__idx + i + 1) + '\t' + str(pos) + '\t' + str(num) + '\t' +
-                   str(label) + '\t1\t0\t' + self.__gensequence(num) + '\n')
-        self.__idx += 50
+        # Generate num complex indels for each kind of cindel.
+        # Totally generate 2*num complex indels.
+        # Note: two lines in table file provide one complex indel information.
+        try:
+            for i in range(1, 2*num + 1, 4):
+                # Homozygote.
+                pos += __genpos()
+                length = __genlen()
+                ss += (str(i) + '\t' + str(pos) + '\t-' + str(length) + '\t3' +
+                       '\t1\t0\t' + self.__reference[pos - 1:pos - 1 + length] + '\n')
+                length = __genlen()
+                ss += (str(i+1) + '\t' + str(pos) + '\t' + str(length) + '\t3' +
+                       '\t1\t0\t' + self.__gensequence(length) + '\n')
+
+                # Heterozygote.
+                pos += __genpos()
+                length = __genlen()
+                ss += (str(i+2) + '\t' + str(pos) + '\t-' + str(length) + '\t1' +
+                       '\t1\t0\t' + self.__reference[pos - 1:pos - 1 + length] + '\n')
+                length = __genlen()
+                ss += (str(i+3) + '\t' + str(pos) + '\t' + str(length) + '\t1' +
+                       '\t1\t0\t' + self.__gensequence(length) + '\n')
+        except Exception as e:
+            logging.exception(e)
+
         return ss
 
     def __gensequence(self, num):
@@ -119,24 +141,24 @@ class CIndel(object):
     """Complex indel class.
     Attributes:
         label: An integer indicates complex indel's label.
-        brkpntL: An integer indicates the left margin of complex indel.
-        brkpntR: An integer indicates the right margin of complex indel.
+        brkpntl: An integer indicates the left margin of complex indel.
+        brkpntr: An integer indicates the right margin of complex indel.
     """
     label = 0
     brkpntl = 0
     brkpntr = 0
 
-    def __init__(self,label, brkpntL, brkpntR):
+    def __init__(self,label, brkpntl, brkpntr):
         """ Initialize an instance.
         :param label: An integer indicates complex indel's label.
-        :param brkpntL: An integer indicates the left margin of complex indel.
-        :param brkpntR: An integer indicates the right margin of complex indel.
+        :param brkpntl: An integer indicates the left margin of complex indel.
+        :param brkpntr: An integer indicates the right margin of complex indel.
         """
 
         # CIndel attributes
         self.label = label
-        self.brkpntl = brkpntL
-        self.brkpntr = brkpntR
+        self.brkpntl = brkpntl
+        self.brkpntr = brkpntr
 
 
 class Read(object):
