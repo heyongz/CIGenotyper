@@ -62,16 +62,40 @@ if __name__ == "__main__":
     assert os.path.exists(tablepath), "Table file not found."
     assert os.path.exists(bashpath), "Bash file not found."
 
-    # [label, feature] = loaddata(300)
+    # [label, feature] = loaddata(200)
     # clf = RVC().fit(feature, label)
     # dump(clf, open(modelpath, 'wb'))
 
-    # writedata(1000)
+    clf = load(open(r'FILES/MODEL/model_50.rvc', 'rb'))
 
+    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+    for n in num:
+        [label, feature] = loaddata(n)
+        print(str(n) + " data: ", clf.score(feature, label))
+
+    print("=" * 30)
+
+    clf = load(open(r'FILES/MODEL/model_100.rvc', 'rb'))
+
+    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+    for n in num:
+        [label, feature] = loaddata(n)
+        print(str(n) + " data: ", clf.score(feature, label))
+
+
+    print("=" * 30)
     clf = load(open(modelpath, 'rb'))
-    [label, feature] = loaddata(500)
-    print("="*80, '\n', np.array(label))
-    print("="*80, '\n', clf.predict(feature))
-    print("="*80, '\n', "Accuracy:", clf.score(feature, label))
 
+    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+    for n in num:
+        [label, feature] = loaddata(n)
+        print(str(n) + " data: ", clf.score(feature, label))
 
+    print("="*30)
+
+    clf = load(open(r'FILES/MODEL/model_300.rvc', 'rb'))
+
+    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+    for n in num:
+        [label, feature] = loaddata(n)
+        print(str(n) + " data: ", clf.score(feature, label))
