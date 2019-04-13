@@ -66,36 +66,6 @@ if __name__ == "__main__":
     # clf = RVC().fit(feature, label)
     # dump(clf, open(modelpath, 'wb'))
 
-    clf = load(open(r'FILES/MODEL/model_50.rvc', 'rb'))
-
-    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-    for n in num:
-        [label, feature] = loaddata(n)
-        print(str(n) + " data: ", clf.score(feature, label))
-
-    print("=" * 30)
-
-    clf = load(open(r'FILES/MODEL/model_100.rvc', 'rb'))
-
-    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-    for n in num:
-        [label, feature] = loaddata(n)
-        print(str(n) + " data: ", clf.score(feature, label))
-
-
-    print("=" * 30)
     clf = load(open(modelpath, 'rb'))
-
-    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-    for n in num:
-        [label, feature] = loaddata(n)
-        print(str(n) + " data: ", clf.score(feature, label))
-
-    print("="*30)
-
-    clf = load(open(r'FILES/MODEL/model_300.rvc', 'rb'))
-
-    num = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-    for n in num:
-        [label, feature] = loaddata(n)
-        print(str(n) + " data: ", clf.score(feature, label))
+    [label, feature] = loaddata(100)
+    print("Accuracy: ", clf.score(feature, label)*100, "%", end='')
